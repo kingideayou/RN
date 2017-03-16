@@ -13,8 +13,11 @@ import {
   Image,
   TextInput,
   ScrollView,
-  ListView
+  ListView,
+  ToastAndroid,
+  Dimensions
 } from 'react-native';
+import ApiUtils from './ApiUtils'
 
 /*
 export default class AwesomeProject extends Component {
@@ -290,7 +293,59 @@ class ListViewBasics extends Component {
   }
 }
 
+const windowWidth = Dimensions.get('window').width;
 export default class AwesomeProject extends Component {
+
+  //js组件的构造函数，js的生命周期
+  constructor(props) {
+      super(props);
+      //state内部维护的一个状态，我们刚开始进来的为空，来加载空的view
+      this.state = {
+          dataSource: new ListView.DataSource({
+              rowHasChanged: (row1, row2) => row1 !== row2,
+          }),
+          //是否已经加载
+          loaded: false
+      };
+
+  }
+  //初始化时执行
+    componentDidMount() {
+        this.getEntriesFromApiAsync();
+    }
+
+  getEntriesFromApiAsync() {
+      // fetch('https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json')
+      fetch('http://v3.wufazhuce.com:8000/api/hp/bymonth/' + new Date())
+        .then((response) => response.json())
+        .then((responseData) => {
+          this.setState({
+            //将获取到的数据赋值给dataSource
+            dataSource: this.state.dataSource.cloneWithRows(responseData.data),
+            //标记已经加载成功完毕
+            loaded: true
+          });
+        })
+        .done();
+    }
+
+
+  //获取到数据加载到listview控件上显示
+  renderMovie(entry) {
+      return (
+          <View style={styles.container}>
+              <Image
+                  source={{uri: entry.hp_img_url}}
+                  style={styles.thumbnail}
+              />
+              <View style={styles.rightContainer}>
+                  <Text style={styles.title}>{entry.hp_content}</Text>
+                  <Text style={styles.year}>{entry.hp_author}</Text>
+              </View>
+          </View>
+      );
+    }
+
   render() {
     return (
       //Style
@@ -309,7 +364,20 @@ export default class AwesomeProject extends Component {
         //<PizzaTranslator/>
 
         // <IScrolledDownAndWhatHappenedNextShockedMe/>
-        <ListViewBasics/>
+
+        // <ListViewBasics/>
+
+        <View>
+          <ListView
+                //设置ListView的数据源
+                dataSource={this.state.dataSource}
+                //listview的回调方法
+                renderRow={this.renderMovie}
+            />
+
+        </View>
+        //监听滑动到底部的方法
+        //onEndReached={()=> {this.fetchData()}}
     );
   }
 }
@@ -338,6 +406,27 @@ const styles = StyleSheet.create({
   },
   red: {
     color: 'red',
+  },
+  title: {
+      fontSize: 22,
+      textAlign: 'center',
+      padding: 20
+  },
+  year: {
+      textAlign: 'center',
+      paddingBottom: 20,
+      fontSize: 18,
+  },
+  rightContainer: {
+      flex: 1,
+  },
+  thumbnail: {
+      width: windowWidth,
+      height: windowWidth * 0.5
+  },
+  listView: {
+      paddingTop: 20,
+      backgroundColor: '#F5FCFF',
   },
 });
 
