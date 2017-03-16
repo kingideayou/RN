@@ -11,7 +11,8 @@ import {
   Text,
   View,
   Image,
-  TextInput
+  TextInput,
+  ScrollView
 } from 'react-native';
 
 /*
@@ -220,6 +221,47 @@ class PizzaTranslator extends Component {
   }
 }
 
+// ScrollView
+class IScrolledDownAndWhatHappenedNextShockedMe extends Component {
+  render() {
+      return(
+        <ScrollView>
+          <Text style={{fontSize:96}}>Scroll me plz</Text>
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Text style={{fontSize:96}}>If you like</Text>
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Text style={{fontSize:96}}>Scrolling down</Text>
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Text style={{fontSize:96}}>What's the best</Text>
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Text style={{fontSize:96}}>Framework around?</Text>
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Image source={require('./img/favicon.png')} />
+          <Text style={{fontSize:80}}>React Native</Text>
+        </ScrollView>
+      );
+  }
+}
+
 export default class AwesomeProject extends Component {
   render() {
     return (
@@ -236,7 +278,9 @@ export default class AwesomeProject extends Component {
 
         // <AlignItemsBasics/>
 
-        <PizzaTranslator/>
+        //<PizzaTranslator/>
+
+        <IScrolledDownAndWhatHappenedNextShockedMe/>
     );
   }
 }
