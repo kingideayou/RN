@@ -12,7 +12,8 @@ import {
   View,
   Image,
   TextInput,
-  ScrollView
+  ScrollView,
+  ListView
 } from 'react-native';
 
 /*
@@ -262,6 +263,33 @@ class IScrolledDownAndWhatHappenedNextShockedMe extends Component {
   }
 }
 
+class ListViewBasics extends Component {
+  //初始化数据
+  constructor(props) {
+    super(props);
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.state = {
+      dataSource: ds.cloneWithRows([
+        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin',
+        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin',
+        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin',
+        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
+      ])
+    }
+  }
+
+  render() {
+    return (
+      <View style={{flex: 1, paddingTop: 22}}>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) => <Text style={{fontSize: 30}}>{rowData}</Text>}
+          />
+      </View>
+    );
+  }
+}
+
 export default class AwesomeProject extends Component {
   render() {
     return (
@@ -280,7 +308,8 @@ export default class AwesomeProject extends Component {
 
         //<PizzaTranslator/>
 
-        <IScrolledDownAndWhatHappenedNextShockedMe/>
+        // <IScrolledDownAndWhatHappenedNextShockedMe/>
+        <ListViewBasics/>
     );
   }
 }
