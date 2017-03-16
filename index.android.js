@@ -65,6 +65,8 @@ export default class AwesomeProject extends Component {
 }
 */
 
+// State(状态)
+/*
 class Blink extends Component {
   constructor(props) {
     super(props);
@@ -96,6 +98,29 @@ export default class AwesomeProject extends Component {
     );
   }
 }
+*/
+
+//Style 样式
+class LotsOfStyles extends Component {
+  render() {
+    return (
+      <View>
+        <Text style={styles.red}>just red</Text>
+        <Text style={styles.bigblue}>just bigblue</Text>
+        <Text style={[styles.bigblue, styles.red]}>bigblue, then red</Text>
+        <Text style={[styles.red, styles.bigblue]}>red, then bigblue</Text>
+      </View>
+    );
+  }
+}
+
+export default class AwesomeProject extends Component {
+  render() {
+    return (
+        <LotsOfStyles/>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -113,6 +138,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  bigblue: {
+    color: 'blue',
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  red: {
+    color: 'red',
   },
 });
 
