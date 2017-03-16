@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TextInput
 } from 'react-native';
 
 /*
@@ -196,6 +197,29 @@ class AlignItemsBasics extends Component {
   }
 }
 
+//Input
+class PizzaTranslator extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {text: ''};
+  }
+  render() {
+    return (
+      <View style={{padding: 10}}>
+        <TextInput
+          style={{height: 40}}
+          placeholder="Type here to translate!"
+          onChangeText={(text) => this.setState({text})}
+          />
+        <Text style={{padding: 10, fontSize: 42}}>
+          //aa && bb 如结果为true，则返回 aa，否则返回 bb。
+          {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
+        </Text>
+      </View>
+    );
+  }
+}
+
 export default class AwesomeProject extends Component {
   render() {
     return (
@@ -210,7 +234,9 @@ export default class AwesomeProject extends Component {
 
         // <JustifyContentBasics/>
 
-        <AlignItemsBasics/>
+        // <AlignItemsBasics/>
+
+        <PizzaTranslator/>
     );
   }
 }
