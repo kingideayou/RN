@@ -78,7 +78,7 @@ export default class OneListPage extends Component {
     }
 
   //获取到数据加载到listview控件上显示
-  renderMovie(entry) {
+  renderEntry(entry) {
       return (
         <TouchableHighlight
           onPress={() =>
@@ -90,7 +90,7 @@ export default class OneListPage extends Component {
                   style={styles.thumbnail}
               />
               <View style={styles.bottomContainer}>
-                  <Text style={styles.content}>{entry.hp_content}</Text>
+                  <Text style={styles.content} allowFontScaling={false}>{entry.hp_content}</Text>
                     <View style={{
                         flex: 1,
                         flexDirection: 'row',
@@ -112,7 +112,7 @@ export default class OneListPage extends Component {
                 //设置ListView的数据源
                 dataSource={this.state.dataSource}
                 //listview的回调方法
-                renderRow={this.renderMovie.bind(this)}
+                renderRow={this.renderEntry.bind(this)}
                 //滑动到底
                 onEndReached={() => {
                   if (!this.state.loading) {
@@ -169,14 +169,14 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   content: {
-      fontSize: 26,
+      fontSize: 16,
       textAlign: 'center',
   },
   description: {
       textAlign: 'center',
       paddingLeft: 10,
       paddingRight: 10,
-      fontSize: 22,
+      fontSize: 14,
       marginTop: 12
   },
   bottomContainer: {
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
       width: windowWidth,
-      height: windowWidth * 0.5
+      height: windowWidth * 0.75
   },
   listView: {
       paddingTop: 20,

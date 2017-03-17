@@ -61,15 +61,6 @@ export default class OneDetailPage extends Component {
     );
   }
 
-  /*
-  onBack={() => {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.pop();
-    }
-  }}
-  */
-
   onNavigationStateChange = (navState) => {
     this.setState({
       backButtonEnabled: navState.canGoBack,
