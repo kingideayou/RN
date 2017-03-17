@@ -15,7 +15,8 @@ import {
   ScrollView,
   ListView,
   ToastAndroid,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from 'react-native';
 import ApiUtils from './ApiUtils'
 
@@ -294,6 +295,7 @@ class ListViewBasics extends Component {
 }
 
 const windowWidth = Dimensions.get('window').width;
+var date = new Date()
 export default class AwesomeProject extends Component {
 
   //js组件的构造函数，js的生命周期
@@ -305,25 +307,27 @@ export default class AwesomeProject extends Component {
               rowHasChanged: (row1, row2) => row1 !== row2,
           }),
           //是否已经加载
-          loaded: false
+          loading: false,
       };
-
+      this.tempData = [];
   }
   //初始化时执行
     componentDidMount() {
-        this.getEntriesFromApiAsync();
+        date.setDate(1);
+        this.getEntriesFromApiAsync(date);
     }
 
-  getEntriesFromApiAsync() {
+  getEntriesFromApiAsync(date) {
+    loading: true
       // fetch('https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json')
-      fetch('http://v3.wufazhuce.com:8000/api/hp/bymonth/' + new Date())
+      fetch('http://v3.wufazhuce.com:8000/api/hp/bymonth/' + date)
         .then((response) => response.json())
         .then((responseData) => {
+          this.tempData = this.tempData.concat(responseData.data);
           this.setState({
             //将获取到的数据赋值给dataSource
-            dataSource: this.state.dataSource.cloneWithRows(responseData.data),
-            //标记已经加载成功完毕
-            loaded: true
+            dataSource: this.state.dataSource.cloneWithRows(this.tempData),
+            loading: false
           });
         })
         .done();
@@ -338,9 +342,16 @@ export default class AwesomeProject extends Component {
                   source={{uri: entry.hp_img_url}}
                   style={styles.thumbnail}
               />
-              <View style={styles.rightContainer}>
-                  <Text style={styles.title}>{entry.hp_content}</Text>
-                  <Text style={styles.year}>{entry.hp_author}</Text>
+              <View style={styles.bottomContainer}>
+                  <Text style={styles.content}>{entry.hp_content}</Text>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'}}>
+                      <Text style={styles.description}>{entry.hp_title}</Text>
+                      <Text style={styles.description}>{entry.hp_author}</Text>
+                    </View>
               </View>
           </View>
       );
@@ -368,19 +379,44 @@ export default class AwesomeProject extends Component {
         // <ListViewBasics/>
 
         <View>
+
           <ListView
                 //设置ListView的数据源
                 dataSource={this.state.dataSource}
                 //listview的回调方法
                 renderRow={this.renderMovie}
+                //滑动到底
+                onEndReached={() => {
+                  if (!this.state.loading) {
+                    date.setMonth(date.getMonth() - 1)
+                    ToastAndroid.show(date, ToastAndroid.SHORT)
+                    this.getEntriesFromApiAsync(date)
+                  }
+                }}
+                /*
+                renderFooter={() => <Footer
+                  loadEntries={ this.getEntriesFromApiAsync(date) }/>}
+                  */
             />
 
         </View>
-        //监听滑动到底部的方法
-        //onEndReached={()=> {this.fetchData()}}
     );
   }
 }
+
+const Footer = (props) => (
+  <View style={styles.container}>
+    <TouchableOpacity style={styles.button}
+      onPress={() => {
+        date.setMonth(date.getMonth() - 1)
+        ToastAndroid.show(date, ToastAndroid.SHORT)
+        // props.getEntriesFromApiAsync(date)
+        this.props.loadEntries(date);
+      }}>
+      <Text style={styles.text}>Load More</Text>
+    </TouchableOpacity>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -407,18 +443,20 @@ const styles = StyleSheet.create({
   red: {
     color: 'red',
   },
-  title: {
+  content: {
+      fontSize: 26,
+      textAlign: 'center',
+  },
+  description: {
+      textAlign: 'center',
+      paddingLeft: 10,
+      paddingRight: 10,
       fontSize: 22,
-      textAlign: 'center',
-      padding: 20
+      marginTop: 12
   },
-  year: {
-      textAlign: 'center',
-      paddingBottom: 20,
-      fontSize: 18,
-  },
-  rightContainer: {
+  bottomContainer: {
       flex: 1,
+      padding: 20
   },
   thumbnail: {
       width: windowWidth,
@@ -427,6 +465,26 @@ const styles = StyleSheet.create({
   listView: {
       paddingTop: 20,
       backgroundColor: '#F5FCFF',
+  },
+});
+
+const footerstyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    borderColor: '#8E8E8E',
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    height: 200
+  },
+  text: {
+    color: '#8E8E8E',
   },
 });
 
