@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 import ApiUtils from './ApiUtils'
 import MyScene from './MyScene';
-import OneDetailPage from './OneDetailPage';
+import OneListPage from './OneListPage';
 
 
 /*
@@ -316,10 +316,10 @@ export default class AwesomeProject extends Component {
       this.tempData = [];
   }
   //初始化时执行
-    componentDidMount() {
-        date.setDate(1);
-        this.getEntriesFromApiAsync(date);
-    }
+    // componentDidMount() {
+        // date.setDate(1);
+        // this.getEntriesFromApiAsync(date);
+    // }
 
   getEntriesFromApiAsync(date) {
     loading: true
@@ -362,6 +362,8 @@ export default class AwesomeProject extends Component {
     }
 
   render() {
+    let defaultName = 'OneListPage';
+    let defaultComponent = OneListPage;
     return (
       //Style
         // <LotsOfStyles/>
@@ -385,9 +387,16 @@ export default class AwesomeProject extends Component {
         // <OneDetailPage />
 
         <Navigator
-          initialRoute={{ title: 'My Initial Scene', index: 0 }}
-          renderScene={(route, navigator) =>
-            <MyScene title={route.title}
+          initialRoute={{ name: defaultName, component: defaultComponent }}
+          configureScene={(route) => {
+            return Navigator.SceneConfigs.VerticalDownSwipeJump
+          }}
+          renderScene={(route, navigator) => {
+            _navigator = navigator;
+            let Component = route.component;
+            return <Component {...route.params} navigator={navigator} />
+            /*
+            <OneListPage title={route.title}
               // Function to call when a new scene should be displayed
               onForward={ () => {
                 const nextIndex = route.index + 1;
@@ -403,7 +412,8 @@ export default class AwesomeProject extends Component {
                   navigator.pop();
                 }
               }}/>
-          }/>
+              */
+          }}/>
 
         /*
         <View>
